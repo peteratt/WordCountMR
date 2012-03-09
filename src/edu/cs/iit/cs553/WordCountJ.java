@@ -8,6 +8,8 @@ import java.io.PrintWriter;
 
 public class WordCountJ {
 	/// JESUS
+	
+	// Pedro
 	/**
 	 * @param args
 	 */
