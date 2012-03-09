@@ -3,13 +3,15 @@ package edu.cs.iit.cs553;
 /**
  * TextCount - cuenta caracteres, palabras y frases en textos en castellano.
  * 
- * @author Pedro çlvarez-Tab’o
+ * @author Pedro ï¿½lvarez-Tabï¿½o
  *
  */
 public class WordCountJ {
-
+	/**
+	 * @param args
+	 */
 	public static void main (String args[]) throws Exception {
 		
 	}
-
 }
+
