@@ -60,6 +60,7 @@ public class WordCountJ {
 			threadPool.execute(new WordCountThread(file));
 		}
 		
+		threadPool.shutdown();
 		// TODO: output to results.txt
 
 	}
