@@ -18,7 +18,7 @@ public class WordCountJ {
 	public static int mode = 0;
 
 	// main execution: $ java WordCountJ -t [nThreads]
-	public static void main(String args[]) throws Exception {
+	public static void main(String args[]) {
 
 		int nThreads = 1;
 		
@@ -51,9 +51,9 @@ public class WordCountJ {
 			
 			// input file sanitization
 			if (i < 10) {
-				file = "../input_0" + i + ".txt";
+				file = "./input/input_0" + i + ".txt";
 			} else {
-				file = "../input_" + i + ".txt";
+				file = "./input/input_" + i + ".txt";
 			}
 			
 			// Execution of the thread pool
