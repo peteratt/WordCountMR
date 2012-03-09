@@ -3,6 +3,8 @@ package edu.cs.iit.cs553;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,9 +31,19 @@ public class WordCountThread implements Runnable {
 			System.out.println(text);
 			Pattern p = Pattern.compile(regexWords);
 			Matcher m = p.matcher(text);
+			
+			Map<String, Integer> words = new HashMap<String, Integer>();
+			
 			while (m.find()) {
-				m.group();
+				String testWord = m.group();
+				if (words.containsKey(testWord)) {
+					int result = words.get(testWord) + 1;
+					words.put(testWord, result);
+				} else {
+					words.put(testWord, 1);
+				}
 			}
+			
 			i.close();
 		} catch (IOException e) {
 			e.printStackTrace();
