@@ -20,9 +20,10 @@ public class WordCountJ {
 		if (args.length > 0)
 			i = new BufferedReader(new FileReader(args[0]));
 		
+		String output = "result" + System.currentTimeMillis() + ".txt";
+		
 		PrintWriter o = new PrintWriter(System.out);
-		if (args.length == 2)
-			o = new PrintWriter(new FileWriter(args[1]));
+		o = new PrintWriter(new FileWriter(args[1]));
 		
 		String line, text = "";
 		while ((line = i.readLine()) != null) {
