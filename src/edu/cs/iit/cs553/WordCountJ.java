@@ -1,5 +1,9 @@
 package edu.cs.iit.cs553;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -17,7 +21,7 @@ public class WordCountJ {
 	
 	public static int mode = 0;
 
-	// main execution: $ java WordCountJ -t [nThreads]
+	// main execution: $ java WordCountJ [-t nThreads] [-v]
 	public static void main(String args[]) {
 
 		int nThreads = 1;
@@ -37,9 +41,11 @@ public class WordCountJ {
 		// Makes a fixed thread pool of nThreads
 		ExecutorService threadPool = Executors.newFixedThreadPool(nThreads);
 		
+		WordCountMonitor monitor = new WordCountMonitor();
+		
 		// Counts words with the pool of nThreads threads in N_FILES files
 		// and reduces each results with a not-yet developed monitor
-		// TODO: code the monitor that handles the reduce
+		// TODO: code the monitor that handles the reduce DONE, TEST NEXT
 		/*
 		 * The monitor must have an array of N_FILES HashMaps and reduce in a 2-to-1
 		 * fashion in each step, that is, each 2 HashMaps submitted by WordCountThreads, 
@@ -61,7 +67,23 @@ public class WordCountJ {
 		}
 		
 		threadPool.shutdown();
-		// TODO: output to results.txt
+		
+		// TODO: output to results.txt DONE, TEST NEXT
+		try {
+			PrintWriter out = new PrintWriter("./output/results.txt");
+
+			Map<String, Integer> lastMap = monitor.getLastMap();
+			Iterator<String> lastMapIterator = lastMap.keySet().iterator();
+			
+			while (lastMapIterator.hasNext()) {
+				String key = lastMapIterator.next().toString();
+				out.println(key + " " + lastMap.get(key));
+			}
+			
+			out.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 
 	}
 
