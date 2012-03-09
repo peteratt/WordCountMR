@@ -12,12 +12,27 @@ import java.util.concurrent.Executors;
  */
 public class WordCountJ {
 	
-	private static final int N_FILES = 0;
+	private static final int N_FILES = 1;
+	public static final int MODE_VERBOSE = 1;
+	
+	public static int mode = 0;
 
-	// main execution: $ java WordCountJ [nThreads]
+	// main execution: $ java WordCountJ -t [nThreads]
 	public static void main(String args[]) throws Exception {
 
-		int nThreads = Integer.parseInt(args[0]);
+		int nThreads = 1;
+		
+		for (int i = 0; i < args.length; i++) {
+			if (args[i].equals("-v")) {
+				mode = MODE_VERBOSE;
+			} else if (i < args.length - 1 && args[i].equals("-t")) {
+				try {
+					nThreads = Integer.parseInt(args[i + 1]);
+				} catch (Exception e) {
+					System.out.println("nThreads not valid, using 1 thread");
+				}
+			}
+		}
 		
 		// Makes a fixed thread pool of nThreads
 		ExecutorService threadPool = Executors.newFixedThreadPool(nThreads);
@@ -44,6 +59,8 @@ public class WordCountJ {
 			// Execution of the thread pool
 			threadPool.execute(new WordCountThread(file));
 		}
+		
+		// TODO: output to results.txt
 
 	}
 

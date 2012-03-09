@@ -28,7 +28,7 @@ public class WordCountThread implements Runnable {
 		
 		try {
 			
-			BufferedReader i = new BufferedReader(new FileReader(filename));
+			BufferedReader in = new BufferedReader(new FileReader(filename));
 
 			/*
 			 *  This "homemade" regex handles words like:
@@ -45,7 +45,7 @@ public class WordCountThread implements Runnable {
 			Map<String, Integer> words = new HashMap<String, Integer>();
 			String line = "";
 			
-			while ((line = i.readLine()) != null) {
+			while ((line = in.readLine()) != null) {
 				
 				m = wordCountPattern.matcher(line);
 				
@@ -67,7 +67,20 @@ public class WordCountThread implements Runnable {
 				}
 			}
 			
-			i.close();
+			// Print contents of the table in verbose mode
+			if (WordCountJ.mode == WordCountJ.MODE_VERBOSE) {
+				String[] wordsTest = (String[]) words.keySet().toArray();
+				Integer[] numberAppeared = (Integer[]) words.values().toArray();
+				
+				StringBuilder sb = new StringBuilder();
+				
+				sb.append("Counting words of " + filename + "...\n");
+				for (int i = 0; i < wordsTest.length; i++) {
+					sb.append(wordsTest[i] + ": " + numberAppeared[i] + "\n");
+				}
+				System.out.print(sb);
+			}
+			in.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
