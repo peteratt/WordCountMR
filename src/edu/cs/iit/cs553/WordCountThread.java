@@ -19,9 +19,11 @@ import java.util.regex.Pattern;
 public class WordCountThread implements Runnable {
 
 	private String filename;
+	WordCountMonitor monitor;
 
-	public WordCountThread(String file) {
+	public WordCountThread(String file, WordCountMonitor m) {
 		filename = file;
+		monitor = m;
 	}
 
 	@Override
@@ -65,21 +67,24 @@ public class WordCountThread implements Runnable {
 					}
 				}
 			}
+			
+			StringBuilder sb = new StringBuilder();
+			sb.append("Counting words of " + filename + "...\n");
 
 			// Print contents of the table in verbose mode
 			if (WordCountJ.mode == WordCountJ.MODE_VERBOSE) {
 				Iterator<String> wordsIterator = words.keySet().iterator();
 
-				StringBuilder sb = new StringBuilder();
-
-				sb.append("Counting words of " + filename + "...\n");
+				
 
 				while (wordsIterator.hasNext()) {
 					String key = wordsIterator.next().toString();
 					sb.append(key + ": " + words.get(key) + "\n");
 				}
-				System.out.print(sb);
 			}
+			System.out.print(sb);
+			monitor.publish(words);
+			
 			in.close();
 		} catch (IOException e) {
 			e.printStackTrace();

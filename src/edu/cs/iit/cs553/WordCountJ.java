@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * WordCount Java version main
@@ -16,7 +17,7 @@ import java.util.concurrent.Executors;
  */
 public class WordCountJ {
 	
-	private static final int N_FILES = 1;
+	private static final int N_FILES = 3;
 	public static final int MODE_VERBOSE = 1;
 	
 	public static int mode = 0;
@@ -63,13 +64,13 @@ public class WordCountJ {
 			}
 			
 			// Execution of the thread pool
-			threadPool.execute(new WordCountThread(file));
+			threadPool.execute(new WordCountThread(file, monitor));
 		}
 		
 		threadPool.shutdown();
-		
-		// TODO: output to results.txt DONE, TEST NEXT
 		try {
+			threadPool.awaitTermination(Integer.MAX_VALUE, TimeUnit.MINUTES);
+		
 			PrintWriter out = new PrintWriter("./output/results.txt");
 
 			Map<String, Integer> lastMap = monitor.getLastMap();
@@ -83,6 +84,8 @@ public class WordCountJ {
 			out.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
 		}
 
 	}
