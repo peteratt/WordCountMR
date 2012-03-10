@@ -69,7 +69,10 @@ public class WordCountThread implements Runnable {
 			}
 			
 			StringBuilder sb = new StringBuilder();
-			sb.append("Counting words of " + filename + "...\n");
+			
+			if (!(WordCountJ.mode == WordCountJ.MODE_QUIET)) {
+				sb.append("Counting words of " + filename + "...\n");
+			}
 
 			// Print contents of the table in verbose mode
 			if (WordCountJ.mode == WordCountJ.MODE_VERBOSE) {

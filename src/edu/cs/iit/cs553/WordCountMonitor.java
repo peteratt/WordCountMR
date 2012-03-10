@@ -57,17 +57,20 @@ public class WordCountMonitor {
 				}
 			}
 			
+			// Publish the resulting map in the queue
 			publish(map2);
 			
+			// Creates a StringBuilder to return the result all at a time
+			// in a single println call
 			StringBuilder sb = new StringBuilder();
-			sb.append("Reducing 2 maps... Result:\n");
+			if (!(WordCountJ.mode == WordCountJ.MODE_QUIET)) {
+				sb.append("Reducing 2 maps...\n");
+			}
 
 			// Print contents of the table in verbose mode
 			if (WordCountJ.mode == WordCountJ.MODE_VERBOSE) {
 				Iterator<String> wordsIterator = map2.keySet().iterator();
 
-
-				sb.append("Reducing 2 maps... Result:\n");
 				while (wordsIterator.hasNext()) {
 					String key = wordsIterator.next().toString();
 					sb.append(key + ": " + map2.get(key) + "\n");

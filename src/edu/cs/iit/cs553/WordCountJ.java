@@ -19,11 +19,15 @@ import java.util.concurrent.TimeUnit;
 public class WordCountJ {
 	
 	public static final int MODE_VERBOSE = 1;
+	public static final int MODE_QUIET = 2;
 	
 	public static int mode = 0;
 
 	// main execution: $ java WordCountJ [-t nThreads] [-v]
 	public static void main(String args[]) {
+		
+		// Initial timestamp
+		long initialTime = System.currentTimeMillis();
 
 		int nThreads = 1;
 		
@@ -36,6 +40,8 @@ public class WordCountJ {
 				} catch (Exception e) {
 					System.out.println("nThreads not valid, using 1 thread");
 				}
+			} else if (args[i].equals("-q")) {
+				mode = MODE_QUIET;
 			}
 		}
 		
@@ -91,7 +97,11 @@ public class WordCountJ {
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
-
+		
+		long finalTime = System.currentTimeMillis();
+		
+		long totalTime = finalTime - initialTime;
+		System.out.println("Word Count Java time: " + totalTime + " ms");
 	}
 
 }
