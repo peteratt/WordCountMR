@@ -12,11 +12,15 @@ public class WordCountMonitor {
 	
 	public void publish(Map<String, Integer> partialResult) {
 		reduceQueue.add(partialResult);
-		if (reduceQueue.size() > 1) {
-			Thread reducer = new Thread(new ReduceThread());
-			reducer.start();
-		}
+		
 		synchronized (this) {
+			if (reduceQueue.size() > 1) {
+				Map<String, Integer> map1 = reduceQueue.poll();
+				Map<String, Integer> map2 = reduceQueue.poll();
+				
+				Thread reducer = new Thread(new ReduceThread(map1, map2));
+				reducer.start();
+			}
 			notifyAll();
 		}
 	}
@@ -30,11 +34,16 @@ public class WordCountMonitor {
 	
 	class ReduceThread implements Runnable {
 
+		private Map<String, Integer> map1;
+		private Map<String, Integer> map2;
+
+		public ReduceThread(Map<String, Integer> source, Map<String, Integer> dest) {
+			map1 = source;
+			map2 = dest;
+		}
+
 		@Override
 		public void run() {
-			
-			Map<String, Integer> map1 = reduceQueue.poll();
-			Map<String, Integer> map2 = reduceQueue.poll();
 			
 			Iterator<String> i = map1.keySet().iterator();
 			

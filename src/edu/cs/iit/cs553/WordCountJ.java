@@ -1,5 +1,6 @@
 package edu.cs.iit.cs553;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Iterator;
@@ -17,7 +18,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class WordCountJ {
 	
-	private static final int N_FILES = 3;
 	public static final int MODE_VERBOSE = 1;
 	
 	public static int mode = 0;
@@ -44,6 +44,10 @@ public class WordCountJ {
 		
 		WordCountMonitor monitor = new WordCountMonitor();
 		
+		// Counts files in input folder
+		File f = new File("./input");
+		int nFiles = f.listFiles().length;
+		
 		// Counts words with the pool of nThreads threads in N_FILES files
 		// and reduces each results with a not-yet developed monitor
 		// TODO: code the monitor that handles the reduce DONE, TEST NEXT
@@ -53,7 +57,7 @@ public class WordCountJ {
 		 * reduce it to another one and erase those 2.
 		 */
 		// TODO: get rid of fixed N_FILES
-		for (int i = 0; i < N_FILES; i++) {
+		for (int i = 0; i < nFiles; i++) {
 			String file;
 			
 			// input file sanitization
