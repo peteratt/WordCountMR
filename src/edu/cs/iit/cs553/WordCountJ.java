@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -82,8 +83,8 @@ public class WordCountJ {
 			threadPool.awaitTermination(Integer.MAX_VALUE, TimeUnit.MINUTES);
 		
 			PrintWriter out = new PrintWriter("./output/results.txt");
-
-			Map<String, Integer> lastMap = monitor.getLastMap();
+			
+			Map<String, Integer> lastMap = new TreeMap<String, Integer>(monitor.getLastMap());
 			Iterator<String> lastMapIterator = lastMap.keySet().iterator();
 			
 			while (lastMapIterator.hasNext()) {

@@ -28,9 +28,9 @@ public class WordCountMR {
 		/*
 		 * This "homemade" regex handles words like:
 		 * 
-		 * six-year-old They're you--I
+		 * six-year-old They're you--I doin'
 		 */
-		String regexWords = "([a-zA-Z]+-{0,2})*([a-zA-Z]+'?)*[a-zA-Z]+";
+		String regexWords = "([a-zA-Z]+-{0,2})*([a-zA-Z]+'?)*[a-zA-Z]+'?";
 		Pattern wordCountPattern;
 		Matcher m;
 
@@ -77,7 +77,7 @@ public class WordCountMR {
 		Job job = new Job(conf, "Hadoop WordCount");
 		job.setJarByClass(WordCountMR.class);
 		
-		// Sets
+		// Sets mapper and reducer
 		job.setMapperClass(WordCountMapper.class);
 		job.setReducerClass(WordCountReducer.class);
 		
@@ -88,6 +88,8 @@ public class WordCountMR {
 		FileInputFormat.addInputPath(job, new Path("./input"));
 		FileOutputFormat.setOutputPath(job, new Path("./output"));
 		
+		// Issue here: Hadoop returns sorted keys, different from our Java implementation
+		// It spends more time
 		boolean completed = job.waitForCompletion(true);
 		// Final timestamp
 		long finalTime = System.currentTimeMillis();

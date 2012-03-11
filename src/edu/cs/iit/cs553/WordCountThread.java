@@ -36,9 +36,9 @@ public class WordCountThread implements Runnable {
 			/*
 			 * This "homemade" regex handles words like:
 			 * 
-			 * six-year-old They're you--I
+			 * six-year-old They're you--I doin'
 			 */
-			String regexWords = "([a-zA-Z]+-{0,2})*([a-zA-Z]+'?)*[a-zA-Z]+";
+			String regexWords = "([a-zA-Z]+-{0,2})*([a-zA-Z]+'?)*[a-zA-Z]+'?";
 			Pattern wordCountPattern = Pattern.compile(regexWords);
 			Matcher m;
 

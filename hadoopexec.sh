@@ -2,11 +2,11 @@ if [[ -f wordcount.jar ]]; then
 	rm wordcount.jar
 fi
 
-if [[ -f hadoopexec ]]; then
+if [[ -d hadoopexec ]]; then
 	rm -rf hadoopexec
 fi
 
-if [[ -f output ]]; then
+if [[ -d output ]]; then
 	rm -rf output
 fi
 
