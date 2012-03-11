@@ -4,8 +4,6 @@ To run this application in a single node:
 
 1. Install Hadoop, stable version recommended: http://www.apache.org/dyn/closer.cgi/hadoop/common/
 
-In the 
-
 2. Install Ant. In Ubuntu:
 
 $ sudo apt-get install ant
