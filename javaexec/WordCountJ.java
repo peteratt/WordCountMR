@@ -76,12 +76,15 @@ public class WordCountJ {
 			threadPool.execute(new WordCountThread(file, monitor));
 		}
 		
+		// Starts the shutdown of the thread pool
 		threadPool.shutdown();
 		try {
+			// When all the threads have finished
 			threadPool.awaitTermination(Integer.MAX_VALUE, TimeUnit.MINUTES);
 		
 			PrintWriter out = new PrintWriter("./output/results.txt");
 			
+			// The TreeMap call sorts the resulting HashMap
 			Map<String, Integer> lastMap = new TreeMap<String, Integer>(monitor.getLastMap());
 			Iterator<String> lastMapIterator = lastMap.keySet().iterator();
 			
