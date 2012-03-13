@@ -15,6 +15,13 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
+/**
+ * Class for the Hadoop version of WordCount
+ * 
+ * @author palvare3
+ * @author jherna22
+ *
+ */
 public class WordCountMR {
 	/**
 	 * The map class of WordCount.
@@ -22,6 +29,7 @@ public class WordCountMR {
 	public static class WordCountMapper extends
 			Mapper<Object, Text, Text, IntWritable> {
 
+		// Fields for output
 		private final static IntWritable one = new IntWritable(1);
 		private Text word = new Text();
 		
@@ -37,7 +45,7 @@ public class WordCountMR {
 		public void map(Object key, Text value, Context context)
 				throws IOException, InterruptedException {
 			
-			// Modify this for the regex
+			// Regex pattern to avoid error cases
 			wordCountPattern = Pattern.compile(regexWords);
 			m = wordCountPattern.matcher(value.toString());
 
@@ -58,6 +66,7 @@ public class WordCountMR {
 		public void reduce(Text key, Iterable<IntWritable> values,
 				Context context) throws IOException, InterruptedException {
 			int sum = 0;
+			// Sums all the <word, nTimes> pairs
 			for (IntWritable value : values) {
 				sum += value.get();
 			}
@@ -80,7 +89,7 @@ public class WordCountMR {
 		// Sets mapper and reducer
 		job.setMapperClass(WordCountMapper.class);
 		job.setReducerClass(WordCountReducer.class);
-		
+				
 		// Sets output keys and values
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);

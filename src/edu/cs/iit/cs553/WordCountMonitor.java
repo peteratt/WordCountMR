@@ -5,29 +5,47 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+/**
+ * The WordCount monitor. It contains a queue of HashMaps and triggers the 
+ * reduce threads to merge the HashMaps.
+ * 
+ * @author palvare3
+ * @author jherna22
+ *
+ */
 public class WordCountMonitor {
 	
 	private Queue<Map<String, Integer>> reduceQueue =
 			new ConcurrentLinkedQueue<Map<String,Integer>>();
+	
+	private volatile boolean finished = false;
+
+	public static int nReduceThreads = 0;
 	
 	public void publish(Map<String, Integer> partialResult) {
 		reduceQueue.add(partialResult);
 		
 		synchronized (this) {
 			if (reduceQueue.size() > 1) {
+				// Takes the first two hash tables and merges them
 				Map<String, Integer> map1 = reduceQueue.poll();
 				Map<String, Integer> map2 = reduceQueue.poll();
 				
+				// With the use of a ReduceThread
 				Thread reducer = new Thread(new ReduceThread(map1, map2));
 				reducer.start();
 			}
+			// Notifies the rest of the threads. Useful when the main
+			// thread is waiting.
 			notifyAll();
 		}
 	}
 	
 	public Map<String, Integer> getLastMap() throws InterruptedException {
 		synchronized (this) {
-			while(reduceQueue.size() < 1) wait();
+			// The main thread enters here and waits until all the threads
+			// have finished.
+			while(!finished) wait();
 		}
 		return reduceQueue.poll();
 	}
@@ -44,6 +62,9 @@ public class WordCountMonitor {
 
 		@Override
 		public void run() {
+			synchronized (this) {
+				nReduceThreads++;
+			}
 			
 			Iterator<String> i = map1.keySet().iterator();
 			
@@ -57,7 +78,13 @@ public class WordCountMonitor {
 				}
 			}
 			
-			// Publish the resulting map in the queue
+			// Publish the resulting map in the queue. When there's only
+			// one reduce remaining and the queue size is 0, and the main 
+			// thread has already entered the getLastMap() and is waiting,
+			// finished = true and the main thread can continue.
+			if (reduceQueue.size() == 0 && nReduceThreads == 1) {
+				finished = true;
+			}
 			publish(map2);
 			
 			// Creates a StringBuilder to return the result all at a time
@@ -77,6 +104,10 @@ public class WordCountMonitor {
 				}
 			}
 			System.out.print(sb);
+			
+			synchronized (this) {
+				nReduceThreads--;
+			}
 		}
 		
 	}
